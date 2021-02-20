@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-deployment
+  labels:
+    app: my-app
+    db: postgres
+spec:
+  selector:
+    matchLabels:
+      app: my-app
+      db: postgres
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: my-app
+        db: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:9.4
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_PASSWORD
+              value: admin
+          volumeMounts:
+            - name: postgres-initdb
+              mountPath: /docker-entrypoint-initdb.d
+      volumes:
+        - name: postgres-initdb
+          configMap:
+            name: postgres-config
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-service
+  labels:
+    app: my-app
+    db: postgres
+spec:
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 5432
+  selector:
+    app: my-app
+    db: postgres

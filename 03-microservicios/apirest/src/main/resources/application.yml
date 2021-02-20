@@ -1,0 +1,21 @@
+server:
+    port: 8080
+
+security:
+    basic:
+        enabled: true
+    oauth2:
+        resource.filter-order: 3
+spring:
+    datasource:
+        driver-class-name: @jdbc.driver@
+        url: @jdbc.url@
+        name:
+        username: @jdbc.user@
+        password: @jdbc.password@
+        initialize: false
+    jpa:
+        open-in-view: false
+        hibernate:
+            ddl-auto: create-drop
+            naming.physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl

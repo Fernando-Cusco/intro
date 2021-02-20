@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: angular-deployment
+  labels:
+    app: my-app
+    frontend: angular
+spec:
+  selector:
+    matchLabels:
+      app: my-app
+      frontend: angular
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: my-app
+        frontend: angular
+    spec:
+      containers:
+        - name: frontend
+          image: fcusco96/angular:v2
+          ports:
+            - containerPort: 80
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+  labels:
+    app: my-app
+    frontend: angular
+spec:
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  selector:
+    app: my-app
+    frontend: angular
+  
